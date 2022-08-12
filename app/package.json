@@ -1,0 +1,35 @@
+{
+  "name": "antipathy.org",
+  "version": "2.0.0",
+  "private": true,
+  "description": "antipathy.org",
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "typecheck": "tsc --noEmit",
+    "lint": "npx eslint . --fix"
+  },
+  "dependencies": {
+    "@mdx-js/react": "^2.3.0",
+    "gatsby": "^5.10.0",
+    "gatsby-background-image": "^1.6.0",
+    "gatsby-plugin-image": "^3.10.0",
+    "gatsby-plugin-manifest": "^5.10.0",
+    "gatsby-plugin-mdx": "^5.10.0",
+    "gatsby-plugin-sharp": "^5.10.0",
+    "gatsby-source-filesystem": "^5.10.0",
+    "gatsby-transformer-sharp": "^5.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.42.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.3"
+  }
+}

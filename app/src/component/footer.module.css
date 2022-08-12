@@ -1,0 +1,9 @@
+.text-muted {
+    color: #777;
+    opacity: 0.6;
+}
+
+.footer {
+    text-align: center;
+    padding: 2px;
+}

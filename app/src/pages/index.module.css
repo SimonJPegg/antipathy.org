@@ -1,0 +1,57 @@
+@import url(https://fonts.googleapis.com/css?family=Poiret+One:400,300,700);
+
+html, body {
+    font-family: 'Poiret One', fantasy !important;
+    height: 100%;
+    margin: 0;
+    color: #777;
+    background-color: #080808;
+}
+
+.titleimage {
+    background-image: url("./logo.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    height: 100vh;
+    width: 100vw;
+    opacity: 0.75;
+}
+
+.caption {
+    font-weight: bold;
+    font-size: x-large;
+    position: absolute;
+    left: 0;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    color: #000;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
+
+a {
+    text-decoration: underline;
+    color: #777;
+}
+
+a:visited {
+    text-decoration: underline;
+    color: #555;
+}
+
+.caption a {
+    font-size: x-small;
+    letter-spacing: 5px;
+    text-decoration: none;
+    color: #666;
+}
+
+.caption span.border {
+    color: #fff;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
+    opacity: 0.65;
+}
