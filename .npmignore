@@ -1,5 +1,0 @@
-deployment/*.ts
-deployment/!*.d.ts
-# CDK asset staging directory
-deployment/.cdk.staging
-deployment/cdk.out
