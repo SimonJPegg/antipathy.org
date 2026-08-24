@@ -23,6 +23,14 @@ function photoPath(filePath: string | undefined): string {
               <span class="chevron">&#8963;</span>
             </div>
           )}
+          <div class="photo-frame">
+            <img
+              src={`/mdx/${photoPath(photo.filePath)}/photo.jpg`}
+              alt={photo.data.title}
+              class="photo-original"
+              loading="lazy"
+            />
+          </div>
           <div class="photo-title">
             <span>{photo.data.title}</span>
           </div>
@@ -53,11 +61,38 @@ function photoPath(filePath: string | undefined): string {
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
 
+  .photo-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .photo-frame {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 60px 24px 0;
+  }
+
+  .photo-original {
+    max-height: calc(100vh - 200px);
+    max-width: 80%;
+    object-fit: contain;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  }
+
   .photo-title {
+    position: relative;
+    z-index: 1;
     padding: 16px 32px;
     margin-bottom: 60px;
   }
@@ -74,6 +109,7 @@ function photoPath(filePath: string | undefined): string {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
   }
 
   .scroll-hint.up {
