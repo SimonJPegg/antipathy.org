@@ -33,6 +33,7 @@ function photoPath(filePath: string | undefined): string {
           </div>
           <div class="photo-title">
             <span>{photo.data.title}</span>
+            <span class="counter">{i + 1} / {photos.length}</span>
           </div>
           {i < photos.length - 1 && (
             <div class="scroll-hint down">
@@ -103,6 +104,14 @@ function photoPath(filePath: string | undefined): string {
     letter-spacing: 4px;
     text-shadow:
       1px 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .photo-title .counter {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 2px;
+    margin-top: 4px;
   }
 
   .scroll-hint {
