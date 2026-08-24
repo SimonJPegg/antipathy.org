@@ -1,0 +1,50 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const photos = await getCollection("photos");
+  return photos.map((photo) => ({
+    params: { slug: photo.data.slug },
+    props: { photo },
+  }));
+}
+
+const { photo } = Astro.props;
+
+function photoDir(filePath: string | undefined): string {
+  const match = filePath?.match(/src\/mdx\/([^/]+)\//);
+  return match ? match[1] : "";
+}
+---
+
+<Layout pageTitle={photo.data.title}>
+  <div class="photo-page">
+    <h2 class="title">{photo.data.title}</h2>
+    <div class="image-container">
+      <img
+        src={`/mdx/${photoDir(photo.filePath)}/photo.jpg`}
+        alt={photo.data.title}
+        class="photo"
+      />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .title {
+    text-align: center;
+  }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .photo {
+    display: block;
+    max-width: 80%;
+    height: auto;
+    margin: 0 auto;
+  }
+</style>

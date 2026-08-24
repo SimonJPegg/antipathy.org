@@ -1,0 +1,118 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const photos = await getCollection("photos");
+
+function photoPath(filePath: string | undefined): string {
+  const match = filePath?.match(/src\/mdx\/([^/]+)\//);
+  return match ? match[1] : "";
+}
+---
+
+<Layout pageTitle="Photos">
+  <div class="parallax-container">
+    {
+      photos.map((photo, i) => (
+        <section
+          class="photo-section"
+          style={`background-image: url('/mdx/${photoPath(photo.filePath)}/photo.jpg');`}
+        >
+          {i > 0 && (
+            <div class="scroll-hint up">
+              <span class="chevron">&#8963;</span>
+            </div>
+          )}
+          <div class="photo-title">
+            <span>{photo.data.title}</span>
+          </div>
+          {i < photos.length - 1 && (
+            <div class="scroll-hint down">
+              <span class="chevron">&#8964;</span>
+            </div>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</Layout>
+
+<style>
+  .parallax-container {
+    height: calc(100vh - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    perspective: 1px;
+  }
+
+  .photo-section {
+    position: relative;
+    height: 100vh;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .photo-title {
+    padding: 16px 32px;
+    margin-bottom: 60px;
+  }
+
+  .photo-title span {
+    font-size: 24px;
+    color: #fff;
+    letter-spacing: 4px;
+    text-shadow:
+      1px 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .scroll-hint.up {
+    top: 20px;
+    animation: bounce-up 2s infinite;
+  }
+
+  .scroll-hint.down {
+    bottom: 20px;
+    animation: bounce-down 2s infinite;
+  }
+
+  .chevron {
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  @keyframes bounce-down {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(10px);
+    }
+    60% {
+      transform: translateY(5px);
+    }
+  }
+
+  @keyframes bounce-up {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+</style>

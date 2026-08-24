@@ -1,0 +1,112 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout pageTitle="Usage">
+  <div class="content">
+    <div class="hero">
+      <h1>Usage</h1>
+    </div>
+    <div class="body">
+      <p>
+        All photos on this site are released under a
+        <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License</a>.
+      </p>
+
+      <h2>You are free to:</h2>
+      <ul>
+        <li>Share — copy, distribute and transmit any of these photographs</li>
+        <li>Remix — create new stuff using these photos</li>
+      </ul>
+
+      <h2>Conditions:</h2>
+      <ul>
+        <li>Attribution — credit me or link to this site</li>
+        <li>Non-commercial — no commercial use</li>
+        <li>Share Alike — derivative works use the same or similar license</li>
+      </ul>
+
+      <h2>Also:</h2>
+      <ul>
+        <li>Any condition can be waived with my permission</li>
+        <li>Fair use rights, moral rights, and privacy rights are unaffected</li>
+      </ul>
+
+      <p class="notice">
+        For reuse or distribution, make the license terms clear to others.
+        Best way: link to this page.
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 50px);
+    background: radial-gradient(ellipse at center, #1a1a1a 0%, #080808 70%);
+  }
+
+  .hero {
+    width: 100%;
+    padding: 80px 0 40px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    letter-spacing: 8px;
+    color: #fff;
+    font-weight: 300;
+  }
+
+  .body {
+    max-width: 600px;
+    padding: 0 24px 60px;
+    line-height: 1.8;
+  }
+
+  .body p {
+    font-size: 16px;
+  }
+
+  .body h2 {
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .body ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .body li {
+    padding: 4px 0;
+    font-size: 16px;
+  }
+
+  .body li::before {
+    content: "—  ";
+    color: #555;
+  }
+
+  .body a {
+    color: #aaa;
+    transition: color 0.2s;
+  }
+
+  .body a:hover {
+    color: #fff;
+  }
+
+  .notice {
+    margin-top: 32px;
+    color: #555;
+    font-size: 14px;
+  }
+</style>
