@@ -47,7 +47,7 @@ function photoPath(filePath: string | undefined): string {
 
   .photo-section {
     position: relative;
-    height: 100vh;
+    height: calc(100vh - 50px);
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -82,7 +82,7 @@ function photoPath(filePath: string | undefined): string {
   }
 
   .scroll-hint.down {
-    bottom: 20px;
+    bottom: 40px;
     animation: bounce-down 2s infinite;
   }
 
