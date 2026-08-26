@@ -4,11 +4,17 @@ import Footer from "../components/Footer.astro";
 
 interface Props {
   pageTitle: string;
+  description?: string;
   ogImage?: string;
   ogDescription?: string;
 }
 
-const { pageTitle, ogImage = "/logo.jpg", ogDescription = "Photography by Ciaran" } = Astro.props;
+const {
+  pageTitle,
+  description = "Photography by Ciaran",
+  ogImage = "/logo.jpg",
+  ogDescription = "Photography by Ciaran",
+} = Astro.props;
 const ogTitle = `antipathy.org : ${pageTitle}`;
 ---
 
@@ -24,6 +30,7 @@ const ogTitle = `antipathy.org : ${pageTitle}`;
       rel="stylesheet"
     />
     <title>antipathy.org : {pageTitle}</title>
+    <meta name="description" content={description} />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
     <meta property="og:image" content={new URL(ogImage, Astro.site).href} />

@@ -3,7 +3,7 @@
 
 <nav class="nav">
   <div class="nav-header">
-    <div class="nav-title">antipathy.org</div>
+    <a href="/" class="nav-title">antipathy.org</a>
   </div>
   <div class="nav-links">
     <a href="/photos">Photos</a>
@@ -24,11 +24,16 @@
     display: inline;
   }
 
-  .nav-title {
+  a.nav-title {
     display: inline-block;
     font-size: 22px;
     color: #fff;
     padding: 10px;
+    text-decoration: none;
+  }
+
+  a.nav-title:visited {
+    color: #fff;
   }
 
   .nav-links {

@@ -1,13 +1,11 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const photos = await getCollection("photos");
-
-function photoPath(filePath: string | undefined): string {
-  const match = filePath?.match(/src\/mdx\/([^/]+)\//);
-  return match ? match[1] : "";
-}
+const photos = (await getCollection("photos")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
 ---
 
 <Layout pageTitle="Photos">
@@ -25,9 +23,13 @@ function photoPath(filePath: string | undefined): string {
             data-index={i}
             aria-label={`View ${photo.data.title}`}
           >
-            <img
-              src={`/mdx/${photoPath(photo.filePath)}/photo.jpg`}
-              alt={photo.data.title}
+            <Image
+              src={photo.data.photo}
+              alt={photo.data.description ?? photo.data.title}
+              width={220}
+              height={138}
+              format="webp"
+              quality={70}
               loading="lazy"
             />
             <span class="grid-title">{photo.data.title}</span>
@@ -54,7 +56,7 @@ function photoPath(filePath: string | undefined): string {
         <section
           class="photo-section"
           id={`photo-${i}`}
-          style={`background-image: url('/mdx/${photoPath(photo.filePath)}/photo.jpg');`}
+          style={`background-image: url('${photo.data.photo.src}');`}
         >
           {i > 0 && (
             <div class="scroll-hint up">
@@ -62,9 +64,13 @@ function photoPath(filePath: string | undefined): string {
             </div>
           )}
           <div class="photo-frame">
-            <img
-              src={`/mdx/${photoPath(photo.filePath)}/photo.jpg`}
-              alt={photo.data.title}
+            <Image
+              src={photo.data.photo}
+              alt={photo.data.description ?? photo.data.title}
+              widths={[600, 1200, 1800]}
+              sizes="80vw"
+              format="webp"
+              quality={85}
               class="photo-original"
               loading="lazy"
             />
@@ -319,7 +325,8 @@ function photoPath(filePath: string | undefined): string {
   .photo-original {
     max-height: calc(100vh - 200px);
     max-width: 80%;
-    object-fit: contain;
+    width: auto;
+    height: auto;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
   }
 
