@@ -11,11 +11,49 @@ function photoPath(filePath: string | undefined): string {
 ---
 
 <Layout pageTitle="Photos">
-  <div class="parallax-container">
+  <!-- Grid overlay panel — fixed, toggleable, follows the user -->
+  <div class="grid-panel open" id="grid-panel">
+    <div class="grid-panel-header">
+      <span class="grid-panel-title">Gallery</span>
+      <button class="grid-panel-close" id="grid-close" aria-label="Close grid">&times;</button>
+    </div>
+    <div class="grid-panel-body">
+      {
+        photos.map((photo, i) => (
+          <button
+            class="grid-item"
+            data-index={i}
+            aria-label={`View ${photo.data.title}`}
+          >
+            <img
+              src={`/mdx/${photoPath(photo.filePath)}/photo.jpg`}
+              alt={photo.data.title}
+              loading="lazy"
+            />
+            <span class="grid-title">{photo.data.title}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Grid toggle button — visible when panel is closed -->
+  <button class="grid-btn hidden" id="grid-open" aria-label="Open grid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+  </button>
+
+  <!-- Parallax view — always present -->
+  <div class="parallax-container" id="parallax-view">
     {
       photos.map((photo, i) => (
         <section
           class="photo-section"
+          id={`photo-${i}`}
           style={`background-image: url('/mdx/${photoPath(photo.filePath)}/photo.jpg');`}
         >
           {i > 0 && (
@@ -46,7 +84,201 @@ function photoPath(filePath: string | undefined): string {
   </div>
 </Layout>
 
+<script>
+  const gridPanel = document.getElementById("grid-panel")!;
+  const gridOpen = document.getElementById("grid-open")!;
+  const gridClose = document.getElementById("grid-close")!;
+  const gridItems = document.querySelectorAll<HTMLButtonElement>(".grid-item");
+  const parallaxView = document.getElementById("parallax-view")!;
+
+  function openGrid(): void {
+    gridPanel.classList.add("open");
+    gridOpen.classList.add("hidden");
+  }
+
+  function closeGrid(): void {
+    gridPanel.classList.remove("open");
+    gridOpen.classList.remove("hidden");
+  }
+
+  function scrollToPhoto(index: number): void {
+    const target = document.getElementById(`photo-${index}`);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  gridOpen.addEventListener("click", openGrid);
+  gridClose.addEventListener("click", closeGrid);
+
+  gridItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const index = parseInt(item.dataset.index ?? "0", 10);
+      scrollToPhoto(index);
+    });
+  });
+
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Escape" && gridPanel.classList.contains("open")) {
+      closeGrid();
+    }
+  });
+
+  // Highlight the current photo in the grid as user scrolls
+  const sections = document.querySelectorAll<HTMLElement>(".photo-section");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const index = id.replace("photo-", "");
+          gridItems.forEach((item) => item.classList.remove("active"));
+          const active = document.querySelector(`.grid-item[data-index="${index}"]`);
+          if (active) {
+            active.classList.add("active");
+            active.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  sections.forEach((section) => observer.observe(section));
+</script>
+
 <style>
+  /* Grid panel — fixed overlay on the left */
+  .grid-panel {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    background: rgba(8, 8, 8, 0.92);
+    backdrop-filter: blur(8px);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .grid-panel.open {
+    transform: translateX(0);
+  }
+
+  .grid-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .grid-panel-title {
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .grid-panel-close {
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  .grid-panel-close:hover {
+    color: #fff;
+  }
+
+  .grid-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .grid-item {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    background: #111;
+    border-radius: 4px;
+    transition: border-color 0.2s, opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .grid-item:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .grid-item.active {
+    border-color: #fff;
+  }
+
+  .grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .grid-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 6px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  /* Grid toggle button */
+  .grid-btn {
+    position: fixed;
+    top: 62px;
+    left: 16px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+
+  .grid-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .grid-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Parallax view */
   .parallax-container {
     height: calc(100vh - 50px);
     overflow-y: auto;
@@ -102,8 +334,7 @@ function photoPath(filePath: string | undefined): string {
     font-size: 24px;
     color: #fff;
     letter-spacing: 4px;
-    text-shadow:
-      1px 1px 4px rgba(0, 0, 0, 0.8);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
   }
 
   .photo-title .counter {
@@ -158,6 +389,42 @@ function photoPath(filePath: string | undefined): string {
     }
     60% {
       transform: translateY(-5px);
+    }
+  }
+
+  /* Mobile: panel becomes bottom sheet */
+  @media (max-width: 768px) {
+    .grid-panel {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 180px;
+      border-right: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      transform: translateY(100%);
+    }
+
+    .grid-panel.open {
+      transform: translateY(0);
+    }
+
+    .grid-panel-body {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .grid-item {
+      min-width: 120px;
+      aspect-ratio: 16 / 10;
+    }
+
+    .grid-btn {
+      top: auto;
+      bottom: 16px;
+      left: 16px;
     }
   }
 </style>
