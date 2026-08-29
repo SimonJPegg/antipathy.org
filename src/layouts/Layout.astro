@@ -7,6 +7,9 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogDescription?: string;
+  /* Fixed-viewport pages (the gallery) own their scroll internally so the nav
+     and footer stay put. Text pages leave this off and scroll normally. */
+  fullHeight?: boolean;
 }
 
 const {
@@ -14,6 +17,7 @@ const {
   description = "Photography by Ciaran",
   ogImage = "/logo.jpg",
   ogDescription = "Photography by Ciaran",
+  fullHeight = false,
 } = Astro.props;
 const ogTitle = `antipathy.org : ${pageTitle}`;
 ---
@@ -38,7 +42,7 @@ const ogTitle = `antipathy.org : ${pageTitle}`;
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <div class="site">
+    <div class:list={["site", { "site--fixed": fullHeight }]}>
       <Navigation />
       <div class="site-content">
         <slot />
@@ -82,5 +86,22 @@ const ogTitle = `antipathy.org : ${pageTitle}`;
 
   .site-content {
     flex-grow: 1;
+  }
+
+  /* Fixed-viewport mode: the whole app is exactly one screen tall, and
+     .site-content is the flex child that scrolls internally. The nav and
+     footer take their natural height; content gets the rest. This keeps the
+     nav and footer on screen regardless of the footer's wrapped height. */
+  .site--fixed {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .site--fixed .site-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 </style>

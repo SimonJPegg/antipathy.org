@@ -8,7 +8,7 @@ const photos = (await getCollection("photos")).sort((a, b) =>
 );
 ---
 
-<Layout pageTitle="Photos">
+<Layout pageTitle="Photos" fullHeight={true}>
   <!-- Grid overlay panel — fixed, toggleable, follows the user -->
   <div class="grid-panel open" id="grid-panel">
     <div class="grid-panel-header">
@@ -286,7 +286,11 @@ const photos = (await getCollection("photos")).sort((a, b) =>
 
   /* Parallax view */
   .parallax-container {
-    height: calc(100vh - 50px);
+    /* Own scroll region. flex:1 fills the space the layout leaves between the
+       nav and the footer, whatever the footer's wrapped height is. Needs the
+       flex chain in Layout.astro to have a definite height (see .site). */
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     perspective: 1px;
@@ -294,7 +298,7 @@ const photos = (await getCollection("photos")).sort((a, b) =>
 
   .photo-section {
     position: relative;
-    height: calc(100vh - 50px);
+    height: 100%;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
